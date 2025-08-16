@@ -14,7 +14,6 @@ from livekit.plugins import deepgram, elevenlabs, openai, silero
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-os.environ["OPENAI_API_KEY"] = "sk-gerdoo-yGpgm4inroXwMQIT4BmtT3BlbkFJ2oidwMoQ3pp1H4yM5tb8"
 os.environ["LIVEKIT_API_KEY"] = "APIjqSP6tGk2tFD"
 os.environ["LIVEKIT_API_SECRET"] = "HUPwC1ijdSVXImU5dGjxxOoyhjufssPUNMX6VSelp9s"
 os.environ["LIVEKIT_URL"] = "wss://chat-server.alshifa.me"
