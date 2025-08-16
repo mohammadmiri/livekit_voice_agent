@@ -22,7 +22,7 @@ from livekit.agents import (
     cli,
     function_tool,
 )
-from livekit.plugins import deepgram, elevenlabs, openai, silero
+from livekit.plugins import openai, silero
 
 @function_tool
 async def lookup_weather(
@@ -48,11 +48,18 @@ async def entrypoint(ctx: JobContext):
         instructions="You are a friendly voice assistant built by LiveKit.",
         tools=[lookup_weather],
     )
+    # session = AgentSession(
+    #     vad=silero.VAD.load(),
+    #     stt=openai.STT(model="whisper-1"),
+    #     llm=openai.LLM(model="gpt-4o-mini"),
+    #     tts=openai.TTS(),
+    # )
+
     session = AgentSession(
         vad=silero.VAD.load(),
-        stt=openai.STT(model="whisper-1"),
-        llm=openai.LLM(model="gpt-4o-mini"),
-        tts=openai.TTS(),
+        stt=openai.STT.with_ollama(url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"),
+        llm=openai.LLM.with_ollama(url="http://ollama.ollama.svc.yarai.local:11434"),
+        tts=openai.TTS.with_ollama(url="http://172.16.20.10:8080/v1"),
     )
 
     logger.info("Starting agent session...")

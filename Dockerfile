@@ -1,18 +1,23 @@
+FROM python:3.12-slim
 
-# Use an official Python runtime as the base image
-FROM python:3.9-slim
+# Install system packages (adjust list as needed)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libapparmor-dev \
+    libdbus-1-dev \
+    python3-apt \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory inside the container
+RUN python3.12 -m ensurepip --upgrade
+
 WORKDIR /app
 
-# Copy requirements.txt first (for better layer caching)
+# Copy Python dependencies file
 COPY requirements.txt .
 
-# Install dependencies
+# Install only Python packages
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
 COPY . .
 
-# Set the command to run your agent
 CMD ["python", "agent.py", "connect", "--room", "default-room"]
