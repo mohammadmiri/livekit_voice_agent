@@ -22,7 +22,9 @@ from livekit.agents import (
     cli,
     function_tool,
 )
-from livekit.plugins import openai, silero
+from livekit.plugins import openai, silero, ollama
+from livekit.plugins.rest import STT, TTS
+
 from livekit import api
 from livekit.api.access_token import VideoGrants
 
@@ -49,17 +51,32 @@ async def entrypoint(ctx: JobContext):
 
     session = AgentSession(
         vad=silero.VAD.load(),
-        stt=openai.STT.with_ollama(url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"),
-        llm=openai.LLM.with_ollama(url="http://ollama.ollama.svc.yarai.local:11434"),
-        tts=openai.TTS.with_ollama(url="http://172.16.20.10:8080/v1"),
+
+        stt=STT(
+            url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1/audio/transcriptions"
+        ),
+
+        llm=ollama.LLM(
+            url="http://ollama.ollama.svc.yarai.local:11434",
+        ),
+
+        tts=TTS(
+            url="http://172.16.20.10:8080/v1/audio/speech"
+        ),
     )
 
-    token = api.AccessToken(
-        os.environ["LIVEKIT_API_KEY"],
-        os.environ["LIVEKIT_API_SECRET"]
-    ).with_identity("voice-agent") \
-     .with_name("Voice Agent") \
-     .to_jwt()
+    # token = api.AccessToken(
+    #     os.environ["LIVEKIT_API_KEY"],
+    #     os.environ["LIVEKIT_API_SECRET"]
+    # ).with_identity("voice-agent") \
+    #  .with_name("Voice Agent") \
+    #  .with_grants(
+    #     VideoGrants(
+    #         room_join=True,
+    #         room="*",  # or "*" to allow joining any room
+    #         )
+    #     ) \
+    #  .to_jwt()
 
     await session.start(
         agent=agent,
@@ -67,7 +84,6 @@ async def entrypoint(ctx: JobContext):
     )
 
     await session.generate_reply(instructions="سلام! من دستیار صوتی هستم. می‌تونم کمکت کنم؟")
-
 
 
 if __name__ == "__main__":
