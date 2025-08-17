@@ -5,7 +5,6 @@ import os
 os.environ["LIVEKIT_API_KEY"] = "APIjqSP6tGk2tFD"
 os.environ["LIVEKIT_API_SECRET"] = "HUPwC1ijdSVXImU5dGjxxOoyhjufssPUNMX6VSelp9s"
 os.environ["LIVEKIT_URL"] = "https://chat-server.alshifa.me"
-os.environ["DEEPGRAM_API_KEY"] = "911edf98105b5e6c6a037c3131679f42ab8aad19"
 
 
 import logging
