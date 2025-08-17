@@ -22,6 +22,8 @@ from livekit.agents import (
     function_tool,
 )
 from livekit.plugins import openai, silero
+from livekit import api
+
 
 @function_tool
 async def lookup_weather(
@@ -32,13 +34,6 @@ async def lookup_weather(
 
     return {"weather": "sunny", "temperature": 70}
 
-
-username = "your_username"
-password = "your_password"
-base_url = "https://your-api-endpoint.com"
-
-# Combine into a single URL with auth
-auth_url = f"https://{username}:{password}@{base_url}"
 
 async def entrypoint(ctx: JobContext):
     await ctx.connect()
@@ -61,11 +56,22 @@ async def entrypoint(ctx: JobContext):
         tts=openai.TTS.with_ollama(url="http://172.16.20.10:8080/v1"),
     )
 
-    logger.info("Starting agent session...")
-    await session.start(agent=agent, room=ctx.room)
+    token = api.AccessToken(
+        os.environ["LIVEKIT_API_KEY"],
+        os.environ["LIVEKIT_API_SECRET"]
+    ).with_identity("voice-agent") \
+     .with_name("Voice Agent") \
+     .with_room_join("default-room") \
+     .to_jwt()
 
-    logger.info("Generating initial reply...")
-    await session.generate_reply(instructions="از کاربر بپرس  که میتونم کمکت کنم یا نه")
+    await session.start(
+        agent=agent,
+        room="default-room",
+        token=token
+    )
+
+    await session.generate_reply(instructions="سلام! من دستیار صوتی هستم. می‌تونم کمکت کنم؟")
+
 
 
 if __name__ == "__main__":
