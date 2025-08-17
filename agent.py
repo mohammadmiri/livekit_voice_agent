@@ -23,16 +23,8 @@ from livekit.agents import (
 )
 from livekit.plugins import openai, silero
 from livekit import api
+from livekit.api.access_token import VideoGrants
 
-
-@function_tool
-async def lookup_weather(
-    context: RunContext,
-    location: str,
-):
-    """Used to look up weather information."""
-
-    return {"weather": "sunny", "temperature": 70}
 
 
 async def entrypoint(ctx: JobContext):
@@ -40,13 +32,12 @@ async def entrypoint(ctx: JobContext):
 
     agent = Agent(
         instructions="You are a friendly voice assistant built by LiveKit.",
-        tools=[lookup_weather],
     )
     # session = AgentSession(
     #     vad=silero.VAD.load(),
-    #     stt=openai.STT(model="whisper-1"),
-    #     llm=openai.LLM(model="gpt-4o-mini"),
-    #     tts=openai.TTS(),
+    #     stt=openai.STT(model="whisper-1", api_key=os.environ["OPENAI_API_KEY"]),
+    #     llm=openai.LLM(model="gpt-4o-mini", api_key=os.environ["OPENAI_API_KEY"]),
+    #     tts=openai.TTS(api_key=os.environ["OPENAI_API_KEY"]),
     # )
 
     session = AgentSession(
@@ -61,13 +52,11 @@ async def entrypoint(ctx: JobContext):
         os.environ["LIVEKIT_API_SECRET"]
     ).with_identity("voice-agent") \
      .with_name("Voice Agent") \
-     .with_room_join("default-room") \
      .to_jwt()
 
     await session.start(
         agent=agent,
         room="default-room",
-        token=token
     )
 
     await session.generate_reply(instructions="سلام! من دستیار صوتی هستم. می‌تونم کمکت کنم؟")
