@@ -1,0 +1,73 @@
+stages:
+  - build
+  - push
+  - helm_validation
+  - deploy_k8s
+
+variables:
+  IMAGE_NAME: "$harbor_url/livekit-voice-agent:${CI_COMMIT_SHA}"
+  GIT_EMAIL: "$git_kube_user@yarai.ir"
+  GIT_NAME: "$git_kube_user"
+
+build-job:
+  stage: build
+  tags:
+    - sindad-us-runner
+  script:
+    - echo "Running first thing"
+    - docker build -t $IMAGE_NAME .
+
+push-job:
+  stage: push
+  tags:
+    - sindad-us-runner
+  script:
+    - echo $harbor_password | docker login $harbor_url -u $harbor_user --password-stdin
+    - docker push $IMAGE_NAME && docker rmi $IMAGE_NAME
+
+helm_validation-job:
+  stage: helm_validation
+  tags:
+    - sindad-us-runner
+  script:
+    - |
+      if [[ "$CI_COMMIT_REF_NAME" == "main" ]]; then
+        MANIFEST_URL=$crm_prod_kube_manifest_url
+        PROJECT_DIR=$prod_project_name      
+        TARGET_BRANCH="main"
+      else
+        MANIFEST_URL=$crm_dev_kube_manifest_url
+        PROJECT_DIR="livekit-voice-agent-dev-helm-chart"
+        TARGET_BRANCH="main"
+      fi
+
+      git clone https://$git_kube_user:$git_kube_pass@$MANIFEST_URL
+      cd $(basename $MANIFEST_URL .git)
+      git config --global user.email "$GIT_EMAIL"
+      git config --global user.name "$GIT_NAME"
+
+      current_tag=$(grep "tag:" ./$PROJECT_DIR/values.yaml | awk '{print $2}')
+      sed -i "s/$current_tag/${CI_COMMIT_SHA}/g" ./$PROJECT_DIR/values.yaml
+
+      git add .
+      git commit -m "Update image tag to ${CI_COMMIT_SHA}"
+      git push -f origin HEAD:$TARGET_BRANCH
+
+deploy-job:
+  stage: deploy_k8s
+  tags:
+    - sindad-us-runner
+  script:
+    - |
+      if [[ "$CI_COMMIT_REF_NAME" == "main" ]]; then
+        APP_NAME=$prod_project_name
+        TOKEN=$PROD_ARGOCD_TOKEN
+      else
+        APP_NAME=$dev_project_name
+        TOKEN=$DEV_ARGOCD_TOKEN
+      fi
+
+      curl -k -X POST https://argocd.yarai.ir/argoproj/api/v1/applications/$APP_NAME/sync \
+        -H "Authorization: Bearer $TOKEN" \
+        -H "Content-Type: application/json" \
+        -d '{"revision":"HEAD"}'
