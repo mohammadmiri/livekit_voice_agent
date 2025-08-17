@@ -5,6 +5,7 @@ import os
 os.environ["LIVEKIT_API_KEY"] = "APIjqSP6tGk2tFD"
 os.environ["LIVEKIT_API_SECRET"] = "HUPwC1ijdSVXImU5dGjxxOoyhjufssPUNMX6VSelp9s"
 os.environ["LIVEKIT_URL"] = "https://chat-server.alshifa.me"
+os.environ["OPENAI_API_KEY"] = ""
 
 
 import logging
@@ -34,10 +35,16 @@ async def entrypoint(ctx: JobContext):
         instructions="You are a friendly voice assistant built by LiveKit.",
     )
     # session = AgentSession(
+    #     stt=openai.STT(
+    #         model="whisper-1",
+    #     ),
+    #     llm=openai.LLM(model="gpt-4o-mini"),
+    #     tts=openai.TTS(
+    #         model="tts-1",
+    #         voice="ash",
+    #         instructions="Speak in a friendly and conversational tone.",
+    #     ),
     #     vad=silero.VAD.load(),
-    #     stt=openai.STT(model="whisper-1", api_key=os.environ["OPENAI_API_KEY"]),
-    #     llm=openai.LLM(model="gpt-4o-mini", api_key=os.environ["OPENAI_API_KEY"]),
-    #     tts=openai.TTS(api_key=os.environ["OPENAI_API_KEY"]),
     # )
 
     session = AgentSession(
@@ -56,7 +63,7 @@ async def entrypoint(ctx: JobContext):
 
     await session.start(
         agent=agent,
-        room="default-room",
+        room=ctx.room,
     )
 
     await session.generate_reply(instructions="سلام! من دستیار صوتی هستم. می‌تونم کمکت کنم؟")
