@@ -22,8 +22,7 @@ from livekit.agents import (
     cli,
     function_tool,
 )
-from livekit.plugins import openai, silero, ollama
-from livekit.plugins.rest import STT, TTS
+from livekit.plugins import openai, silero
 
 from livekit import api
 from livekit.api.access_token import VideoGrants
@@ -52,16 +51,17 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         vad=silero.VAD.load(),
 
-        stt=STT(
-            url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1/audio/transcriptions"
+        stt=openai.STT(
+            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1"
         ),
 
-        llm=ollama.LLM(
-            url="http://ollama.ollama.svc.yarai.local:11434",
+        llm=openai.LLM.with_ollama(
+            base_url="http://ollama.ollama.svc.yarai.local:11434",
+            model="llama3.1"
         ),
 
-        tts=TTS(
-            url="http://172.16.20.10:8080/v1/audio/speech"
+        tts=openai.TTS(
+            base_url="http://172.16.20.10:8080/v1"
         ),
     )
 
