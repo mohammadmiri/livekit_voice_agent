@@ -136,10 +136,11 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
-    # asyncio.run(test_stt())
-    # asyncio.run(test_llm())
-    # asyncio.run(test_tts())
+    asyncio.run(test_stt())
+    asyncio.run(test_llm())
+    asyncio.run(test_tts())
     asyncio.run(list_livekit_rooms())
+    logger.info("🔍 Testing connections to STT/LLM/TTS services... done")
     cli.run_app(WorkerOptions(
             entrypoint_fnc=entrypoint,
             api_key=os.environ["LIVEKIT_API_KEY"],
