@@ -116,9 +116,15 @@ async def entrypoint(ctx: JobContext):
 
     session = AgentSession(
         vad=silero.VAD.load(),
-        stt=stt,
-        llm=llm,
-        tts=tts,
+        stt=openai.STT(
+            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"
+        ),
+        llm=openai.LLM.with_ollama(
+            base_url="http://ollama.ollama.svc.yarai.local:11434",
+        ),
+        tts=openai.TTS(
+            base_url="http://172.16.20.10:8080/v1"
+        ),
     )
 
     await session.start(
