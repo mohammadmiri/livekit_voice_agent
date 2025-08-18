@@ -49,7 +49,7 @@ async def test_stt():
 
 
 async def test_llm():
-    client = AsyncOpenAI(base_url="http://ollama.ollama.svc.yarai.local:11434/v1/chat/completions")
+    client = AsyncOpenAI(base_url="http://ollama.ollama.svc.yarai.local:11434/v1")
 
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
