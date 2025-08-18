@@ -4,7 +4,7 @@ import asyncio
 import os
 os.environ["LIVEKIT_API_KEY"] = "APIjqSP6tGk2tFD"
 os.environ["LIVEKIT_API_SECRET"] = "HUPwC1ijdSVXImU5dGjxxOoyhjufssPUNMX6VSelp9s"
-os.environ["LIVEKIT_URL"] = "ws://185.149.192.38:7880"
+os.environ["LIVEKIT_URL"] = "wss://185.149.192.38:7880"
 os.environ["OPENAI_API_KEY"] = ""
 
 
