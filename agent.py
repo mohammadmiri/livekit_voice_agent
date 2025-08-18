@@ -126,6 +126,14 @@ async def entrypoint(ctx: JobContext):
         agent=agent,
         room=ctx.room,
     )
+    logger.info("✅ Agent joined as %s", ctx.room.local_participant.identity)
+
+    # greet existing participants
+    for p in ctx.room.remote_participants.values():
+        logger.info("👤 Already in room: %s", p.identity)
+        await session.generate_reply(
+            instructions=f"سلام {p.identity}! من دستیار صوتی هستم. می‌تونم کمکت کنم؟"
+        )
 
     @ctx.room.on("participant_connected")
     async def handle_participant(p: rtc.RemoteParticipant):
