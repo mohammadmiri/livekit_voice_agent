@@ -26,7 +26,6 @@ from livekit.agents import (
     function_tool,
 )
 from livekit.plugins import openai, silero
-from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 
 from livekit import api, rtc
@@ -141,7 +140,6 @@ async def entrypoint(ctx: JobContext):
         tts=openai.TTS(
             base_url="http://172.16.20.10:8080/v1"
         ),
-        turn_detection=MultilingualModel(),
     )
 
     await session.start(
