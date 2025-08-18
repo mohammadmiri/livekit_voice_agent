@@ -9,7 +9,9 @@ os.environ["OPENAI_API_KEY"] = ""
 
 
 import logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
+logging.getLogger("livekit").setLevel(logging.DEBUG)
+logging.getLogger("httpx").setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
