@@ -140,7 +140,7 @@ async def test_your_agent() -> None:
 
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect(identity="voice-agent")
+    await ctx.connect()
     
     agent = Agent(
         instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
