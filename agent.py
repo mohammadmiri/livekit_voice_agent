@@ -99,12 +99,7 @@ async def list_livekit_rooms(livekit_url: str=os.environ["LIVEKIT_URL"], api_key
 
 
 async def entrypoint(ctx: JobContext):
-    room = await ctx.connect()
-    if room:
-        logger.info(f"✅ Connected to LiveKit room: {room.name}")
-    else:
-        logger.error("❌ Failed to connect to LiveKit room")
-        return
+    await ctx.connect()
     
     agent = Agent(
         instructions="You are a friendly voice assistant built by LiveKit.",
