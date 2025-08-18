@@ -31,14 +31,15 @@ from livekit.api.access_token import VideoGrants
 
 from openai import AsyncOpenAI
 
-client = AsyncOpenAI(base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1")
-
 
 async def test():
+
+    client = AsyncOpenAI(base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1")
+    
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
     try:
-        file = open("audio.wav", "rb")
+        file = open("welcome.mp3", "rb")
         result = await client.audio.transcriptions.create(
             model="whisper-1",
             file=("audio.wav", file, "audio/wav")
