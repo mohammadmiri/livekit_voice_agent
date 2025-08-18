@@ -31,7 +31,7 @@ from livekit.api.access_token import VideoGrants
 
 
 
-def test():
+async def test():
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
     # test STT
@@ -102,7 +102,7 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
-    test()
+    asyncio.run(test())
     cli.run_app(WorkerOptions(
             entrypoint_fnc=entrypoint,
             api_key=os.environ["LIVEKIT_API_KEY"],
