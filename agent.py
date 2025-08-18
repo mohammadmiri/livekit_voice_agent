@@ -140,6 +140,8 @@ async def test_your_agent() -> None:
 
 
 async def entrypoint(ctx: JobContext):
+
+    logger.info("🔍 Testing connections to STT/LLM/TTS services...")
     await ctx.connect()
     
     agent = Agent(
