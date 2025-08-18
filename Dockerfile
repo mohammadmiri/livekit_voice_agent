@@ -20,4 +20,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "agent.py", "connect", "--room", "default-room"]
+CMD ["python", "agent.py", "connect", "--room", "default-room", "--participant-identity", "voice-agent"]
