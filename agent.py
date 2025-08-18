@@ -80,14 +80,6 @@ async def test_tts():
 
 
 async def list_livekit_rooms(livekit_url: str=os.environ["LIVEKIT_URL"], api_key: str=os.environ["LIVEKIT_API_KEY"], api_secret: str=os.environ["LIVEKIT_API_SECRET"]):
-    """
-    Lists all active rooms on a LiveKit server.
-
-    Args:
-        livekit_url: The URL of your LiveKit server (e.g., "https://my-project.livekit.cloud").
-        api_key: Your LiveKit API key.
-        api_secret: Your LiveKit API secret.
-    """
     lkapi = api.LiveKitAPI(livekit_url, api_key, api_secret)
     try:
         # Create an empty ListRoomsRequest to get all rooms
@@ -169,7 +161,7 @@ if __name__ == "__main__":
     asyncio.run(test_stt())
     asyncio.run(test_llm())
     asyncio.run(test_tts())
-    asyncio.run(check_livekit_connection())
+    asyncio.run(list_livekit_rooms())
     cli.run_app(WorkerOptions(
             entrypoint_fnc=entrypoint,
             api_key=os.environ["LIVEKIT_API_KEY"],
