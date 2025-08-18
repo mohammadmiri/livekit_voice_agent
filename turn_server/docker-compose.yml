@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  coturn:
+    image: instrumentisto/coturn
+    container_name: coturn
+    network_mode: host   # important for UDP relay
+    restart: unless-stopped
+    command:
+      - -n
+      - --log-file=stdout
+      - --external-ip=185.149.192.38
+      - --listening-port=3478
+      - --min-port=49160
+      - --max-port=49200
+      - --realm=185.149.192.38
+      - --fingerprint
+      - --lt-cred-mech
+      - --user=livekit:SUPER_SECRET_KEY
+      - --use-auth-secret=SUPER_SECRET_KEY
+    environment:
+      - TURN_LOG_LEVEL=3
