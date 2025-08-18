@@ -98,6 +98,24 @@ async def list_livekit_rooms(livekit_url: str=os.environ["LIVEKIT_URL"], api_key
         await lkapi.aclose()
 
 
+async def ensure_room():
+    lkapi = api.LiveKitAPI(LIVEKIT_URL, API_KEY, API_SECRET)
+    try:
+        # List rooms
+        rooms_resp = await lkapi.room.list_rooms(api.ListRoomsRequest())
+        room_names = [r.name for r in rooms_resp.rooms]
+
+        if ROOM_NAME in room_names:
+            print(f"Room '{ROOM_NAME}' already exists")
+        else:
+            print(f"Room '{ROOM_NAME}' does not exist — creating")
+            await lkapi.room.create_room(api.CreateRoomRequest(name=ROOM_NAME))
+            print(f"Room '{ROOM_NAME}' created successfully")
+    finally:
+        await lkapi.aclose()
+
+
+
 async def entrypoint(ctx: JobContext):
     await ctx.connect(identity="voice-agent")
     
@@ -144,10 +162,11 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
-    asyncio.run(test_stt())
-    asyncio.run(test_llm())
-    asyncio.run(test_tts())
-    asyncio.run(list_livekit_rooms())
+    # asyncio.run(test_stt())
+    # asyncio.run(test_llm())
+    # asyncio.run(test_tts())
+    # asyncio.run(list_livekit_rooms())
+    asyncio.run(ensure_room())
     logger.info("🔍 Testing connections to STT/LLM/TTS services... done")
     cli.run_app(WorkerOptions(
             entrypoint_fnc=entrypoint,
