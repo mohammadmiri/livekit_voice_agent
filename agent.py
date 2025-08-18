@@ -35,48 +35,47 @@ async def entrypoint(ctx: JobContext):
     agent = Agent(
         instructions="You are a friendly voice assistant built by LiveKit.",
     )
-    # session = AgentSession(
-    #     stt=openai.STT(
-    #         model="whisper-1",
-    #     ),
-    #     llm=openai.LLM(model="gpt-4o-mini"),
-    #     tts=openai.TTS(
-    #         model="tts-1",
-    #         voice="ash",
-    #         instructions="Speak in a friendly and conversational tone.",
-    #     ),
-    #     vad=silero.VAD.load(),
-    # )
+
+    logger.info("🔍 Testing connections to STT/LLM/TTS services...")
+
+    # test STT
+    try:
+        stt = openai.STT(
+            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1"
+        )
+        result = await stt.transcribe(b"hello")  # minimal audio bytes
+        logger.info(f"✅ STT service responded: {result}")
+    except Exception as e:
+        logger.error(f"❌ STT connection failed: {e}")
+
+    # test LLM
+    try:
+        llm = openai.LLM.with_ollama(
+            base_url="http://ollama.ollama.svc.yarai.local:11434",
+        )
+        reply = await llm.chat(messages=[{"role": "user", "content": "ping"}])
+        logger.info(f"✅ LLM service responded: {reply}")
+    except Exception as e:
+        logger.error(f"❌ LLM connection failed: {e}")
+
+    # test TTS
+    try:
+        tts = openai.TTS(
+            base_url="http://172.16.20.10:8080/v1"
+        )
+        audio = await tts.synthesize("ping")
+        logger.info(f"✅ TTS service returned {len(audio)} bytes")
+    except Exception as e:
+        logger.error(f"❌ TTS connection failed: {e}")
+
+    logger.info("⚡ Now starting AgentSession...")
 
     session = AgentSession(
         vad=silero.VAD.load(),
-
-        stt=openai.STT(
-            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1"
-        ),
-
-        llm=openai.LLM.with_ollama(
-            base_url="http://ollama.ollama.svc.yarai.local:11434",
-            model="llama3.1"
-        ),
-
-        tts=openai.TTS(
-            base_url="http://172.16.20.10:8080/v1"
-        ),
+        stt=stt,
+        llm=llm,
+        tts=tts,
     )
-
-    # token = api.AccessToken(
-    #     os.environ["LIVEKIT_API_KEY"],
-    #     os.environ["LIVEKIT_API_SECRET"]
-    # ).with_identity("voice-agent") \
-    #  .with_name("Voice Agent") \
-    #  .with_grants(
-    #     VideoGrants(
-    #         room_join=True,
-    #         room="*",  # or "*" to allow joining any room
-    #         )
-    #     ) \
-    #  .to_jwt()
 
     await session.start(
         agent=agent,
