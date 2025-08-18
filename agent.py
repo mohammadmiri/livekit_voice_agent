@@ -139,6 +139,7 @@ async def test_your_agent() -> None:
         logger.info(f"🔍 Result: {result}")
 
 
+
 async def entrypoint(ctx: JobContext):
     await ctx.connect(identity="voice-agent")
     
@@ -185,11 +186,11 @@ if __name__ == "__main__":
     # asyncio.run(test_tts())
     # asyncio.run(list_livekit_rooms())
     # asyncio.run(ensure_room())
-    asyncio.run(test_your_agent())
-    # logger.info("🔍 Testing connections to STT/LLM/TTS services... done")
-    # cli.run_app(WorkerOptions(
-    #         entrypoint_fnc=entrypoint,
-    #         api_key=os.environ["LIVEKIT_API_KEY"],
-    #         api_secret=os.environ["LIVEKIT_API_SECRET"],
-    #         ws_url=os.environ["LIVEKIT_URL"],
-    #     ))
+    # asyncio.run(test_your_agent())
+    logger.info("🔍 Testing connections to STT/LLM/TTS services... done")
+    cli.run_app(WorkerOptions(
+            entrypoint_fnc=entrypoint,
+            api_key=os.environ["LIVEKIT_API_KEY"],
+            api_secret=os.environ["LIVEKIT_API_SECRET"],
+            ws_url=os.environ["LIVEKIT_URL"],
+        ))
