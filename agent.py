@@ -122,6 +122,7 @@ async def test_your_agent() -> None:
         # You must create an LLM instance for the `judge` method
         openai.LLM.with_ollama(
             base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
+            model="alibayram/medgemma:latest",
         ) as llm,
 
         # Create a session for the life of this test. 
@@ -156,6 +157,7 @@ async def entrypoint(ctx: JobContext):
         ),
         llm=openai.LLM.with_ollama(
             base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
+            model="alibayram/medgemma:latest",
         ),
         tts=openai.TTS(
             base_url="http://172.16.20.10:8080/v1"
