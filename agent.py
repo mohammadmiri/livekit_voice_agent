@@ -74,7 +74,7 @@ async def test_tts():
             input="Hello, world!",
             voice="nova"
         )
-        logger.info(f"✅ TTS service returned {len(audio)} bytes")
+        logger.info(f"✅ TTS service returned {str(audio)}")
     except Exception as e:
         logger.error(f"❌ TTS connection failed: {e}")
 
