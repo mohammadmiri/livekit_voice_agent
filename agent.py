@@ -79,18 +79,34 @@ async def test_tts():
         logger.error(f"❌ TTS connection failed: {e}")
 
 
-async def check_livekit_connection():
-    try:
-        # Create a client to the LiveKit server
-        client = api.RoomServiceClient(os.environ["LIVEKIT_URL"], os.environ["LIVEKIT_API_KEY"], os.environ["LIVEKIT_API_SECRET"])
+async def list_livekit_rooms(livekit_url: str=os.environ["LIVEKIT_URL"], api_key: str=os.environ["LIVEKIT_API_KEY"], api_secret: str=os.environ["LIVEKIT_API_SECRET"]):
+    """
+    Lists all active rooms on a LiveKit server.
 
-        # Simple test: list rooms
-        resp = await client.list_rooms()
-        logger.info(f"✅ Connected to LiveKit, rooms: {resp.rooms}")
-        return True
+    Args:
+        livekit_url: The URL of your LiveKit server (e.g., "https://my-project.livekit.cloud").
+        api_key: Your LiveKit API key.
+        api_secret: Your LiveKit API secret.
+    """
+    lkapi = api.LiveKitAPI(livekit_url, api_key, api_secret)
+    try:
+        # Create an empty ListRoomsRequest to get all rooms
+        list_rooms_request = api.ListRoomsRequest()
+        
+        # Call the list_rooms method
+        response = await lkapi.room.list_rooms(list_rooms_request)
+        
+        if response.rooms:
+            print("Active LiveKit Rooms:")
+            for room in response.rooms:
+                print(f"- Name: {room.name}, SID: {room.sid}, Number of Participants: {room.num_participants}")
+        else:
+            print("No active rooms found on the LiveKit server.")
+
     except Exception as e:
-        logger.error(f"❌ Failed to connect to LiveKit: {e}")
-        return False
+        print(f"An error occurred: {e}")
+    finally:
+        await lkapi.aclose()
 
 
 async def entrypoint(ctx: JobContext):
