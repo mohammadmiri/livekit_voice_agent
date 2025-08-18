@@ -49,7 +49,7 @@ async def test_stt():
 
 
 async def test_llm():
-    client = AsyncOpenAI(base_url="http://ollama.ollama.svc.yarai.local:11434")
+    client = AsyncOpenAI(base_url="http://ollama.ollama.svc.yarai.local:11434/api")
 
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
@@ -120,7 +120,7 @@ async def entrypoint(ctx: JobContext):
             base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"
         ),
         llm=openai.LLM.with_ollama(
-            base_url="http://ollama.ollama.svc.yarai.local:11434",
+            base_url="http://ollama.ollama.svc.yarai.local:11434/api",
         ),
         tts=openai.TTS(
             base_url="http://172.16.20.10:8080/v1"
