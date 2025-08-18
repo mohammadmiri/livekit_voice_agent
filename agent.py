@@ -32,10 +32,9 @@ from livekit.api.access_token import VideoGrants
 from openai import AsyncOpenAI
 
 
-async def test():
-
+async def test_stt():
     client = AsyncOpenAI(base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1")
-    
+
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
     try:
@@ -47,6 +46,38 @@ async def test():
         logger.info(f"✅ STT service responded: {result.text}")
     except Exception as e:
         logger.error(f"❌ STT connection failed: {e}")
+
+
+async def test_llm():
+    client = AsyncOpenAI(base_url="http://ollama.ollama.svc.yarai.local:11434")
+
+    logger.info("🔍 Testing connections to STT/LLM/TTS services...")
+
+    try:
+        result = await client.chat.completions.create(
+            model="alibayram/medgemma:latest",
+            messages=[{"role": "user", "content": "ping"}]
+        )
+        logger.info(f"✅ LLM service responded: {result.choices[0].message.content}")
+    except Exception as e:
+        logger.error(f"❌ LLM connection failed: {e}")
+
+
+async def test_tts():
+    client = AsyncOpenAI(base_url="http://172.16.20.10:8080/v1")
+
+    logger.info("🔍 Testing connections to STT/LLM/TTS services...")
+
+    try:
+        audio = await client.audio.speech.create(
+            model="tts-1",
+            input="Hello, world!",
+            voice="nova"
+        )
+        logger.info(f"✅ TTS service returned {len(audio)} bytes")
+    except Exception as e:
+        logger.error(f"❌ TTS connection failed: {e}")
+
 
 
 async def entrypoint(ctx: JobContext):
@@ -61,7 +92,7 @@ async def entrypoint(ctx: JobContext):
     # test STT
     try:
         stt = openai.STT(
-            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1"
+            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"
         )
         result = await stt.transcribe(b"hello")  # minimal audio bytes
         logger.info(f"✅ STT service responded: {result}")
@@ -106,7 +137,9 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
-    asyncio.run(test())
+    asyncio.run(test_stt())
+    asyncio.run(test_llm())
+    asyncio.run(test_tts())
     # cli.run_app(WorkerOptions(
     #         entrypoint_fnc=entrypoint,
     #         api_key=os.environ["LIVEKIT_API_KEY"],
