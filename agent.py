@@ -140,9 +140,9 @@ if __name__ == "__main__":
     asyncio.run(test_stt())
     asyncio.run(test_llm())
     asyncio.run(test_tts())
-    # cli.run_app(WorkerOptions(
-    #         entrypoint_fnc=entrypoint,
-    #         api_key=os.environ["LIVEKIT_API_KEY"],
-    #         api_secret=os.environ["LIVEKIT_API_SECRET"],
-    #         ws_url=os.environ["LIVEKIT_URL"],
-    #     ))
+    cli.run_app(WorkerOptions(
+            entrypoint_fnc=entrypoint,
+            api_key=os.environ["LIVEKIT_API_KEY"],
+            api_secret=os.environ["LIVEKIT_API_SECRET"],
+            ws_url=os.environ["LIVEKIT_URL"],
+        ))
