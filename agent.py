@@ -127,7 +127,12 @@ async def entrypoint(ctx: JobContext):
         room=ctx.room,
     )
 
-    await session.generate_reply(instructions="سلام! من دستیار صوتی هستم. می‌تونم کمکت کنم؟")
+    @ctx.room.on("participant_connected")
+    async def handle_participant(p: rtc.RemoteParticipant):
+        await session.generate_reply(
+            instructions=f"سلام {p.identity}! من دستیار صوتی هستم. می‌تونم کمکت کنم؟"
+        )
+
 
 
 if __name__ == "__main__":
