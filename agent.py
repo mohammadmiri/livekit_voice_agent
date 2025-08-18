@@ -142,7 +142,7 @@ async def test_your_agent() -> None:
 async def entrypoint(ctx: JobContext):
 
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
-    await ctx.connect()
+    # await ctx.connect()
     
     # agent = Agent(
     #     instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
