@@ -117,6 +117,23 @@ async def ensure_room():
         await lkapi.aclose()
 
 
+async def test_your_agent() -> None:
+    async with (
+        # You must create an LLM instance for the `judge` method
+        openai.LLM.with_ollama(
+            base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
+        ) as llm,
+
+        # Create a session for the life of this test. 
+        # LLM is not required - it will use the agent's LLM if you don't provide one here
+        AgentSession(llm=llm) as session,
+    ):
+        # Start the agent in the session
+        await session.start(Assistant())
+        
+        result = await session.run(user_input="سلام")
+        logger.info(f"🔍 Result: {result}")
+
 
 async def entrypoint(ctx: JobContext):
     await ctx.connect(identity="voice-agent")
@@ -162,11 +179,12 @@ if __name__ == "__main__":
     # asyncio.run(test_llm())
     # asyncio.run(test_tts())
     # asyncio.run(list_livekit_rooms())
-    asyncio.run(ensure_room())
-    logger.info("🔍 Testing connections to STT/LLM/TTS services... done")
-    cli.run_app(WorkerOptions(
-            entrypoint_fnc=entrypoint,
-            api_key=os.environ["LIVEKIT_API_KEY"],
-            api_secret=os.environ["LIVEKIT_API_SECRET"],
-            ws_url=os.environ["LIVEKIT_URL"],
-        ))
+    # asyncio.run(ensure_room())
+    asyncio.run(test_your_agent())
+    # logger.info("🔍 Testing connections to STT/LLM/TTS services... done")
+    # cli.run_app(WorkerOptions(
+    #         entrypoint_fnc=entrypoint,
+    #         api_key=os.environ["LIVEKIT_API_KEY"],
+    #         api_secret=os.environ["LIVEKIT_API_SECRET"],
+    #         ws_url=os.environ["LIVEKIT_URL"],
+    #     ))
