@@ -99,7 +99,7 @@ async def list_livekit_rooms(livekit_url: str=os.environ["LIVEKIT_URL"], api_key
 
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
+    await ctx.connect(identity="voice-agent")
     
     agent = Agent(
         instructions="You are a friendly voice assistant built by LiveKit.",
