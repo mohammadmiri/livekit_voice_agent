@@ -128,8 +128,11 @@ async def test_your_agent() -> None:
         # LLM is not required - it will use the agent's LLM if you don't provide one here
         AgentSession(llm=llm) as session,
     ):
+        agent = Agent(
+            instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
+        )
         # Start the agent in the session
-        await session.start(Assistant())
+        await session.start(agent)
         
         result = await session.run(user_input="سلام")
         logger.info(f"🔍 Result: {result}")
