@@ -5,6 +5,7 @@ import os
 os.environ["LIVEKIT_API_KEY"] = "APIjqSP6tGk2tFD"
 os.environ["LIVEKIT_API_SECRET"] = "HUPwC1ijdSVXImU5dGjxxOoyhjufssPUNMX6VSelp9s"
 os.environ["LIVEKIT_URL"] = "ws://185.149.192.38:7880"
+ROOM_NAME = "default-room"
 os.environ["OPENAI_API_KEY"] = ""
 
 
@@ -99,7 +100,7 @@ async def list_livekit_rooms(livekit_url: str=os.environ["LIVEKIT_URL"], api_key
 
 
 async def ensure_room():
-    lkapi = api.LiveKitAPI(LIVEKIT_URL, API_KEY, API_SECRET)
+    lkapi = api.LiveKitAPI(os.environ["LIVEKIT_URL"], os.environ["LIVEKIT_API_KEY"], os.environ["LIVEKIT_API_SECRET"])
     try:
         # List rooms
         rooms_resp = await lkapi.room.list_rooms(api.ListRoomsRequest())
