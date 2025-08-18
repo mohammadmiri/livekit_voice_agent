@@ -31,6 +31,20 @@ from livekit.api.access_token import VideoGrants
 
 
 
+def test():
+    logger.info("🔍 Testing connections to STT/LLM/TTS services...")
+
+    # test STT
+    try:
+        stt = openai.STT(
+            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1"
+        )
+        result = await stt.transcribe(b"hello")  # minimal audio bytes
+        logger.info(f"✅ STT service responded: {result}")
+    except Exception as e:
+        logger.error(f"❌ STT connection failed: {e}")
+
+
 async def entrypoint(ctx: JobContext):
     await ctx.connect()
 
@@ -88,6 +102,7 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
+    test()
     cli.run_app(WorkerOptions(
             entrypoint_fnc=entrypoint,
             api_key=os.environ["LIVEKIT_API_KEY"],
