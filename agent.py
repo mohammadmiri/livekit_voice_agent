@@ -119,7 +119,6 @@ async def ensure_room():
 
 async def test_your_agent() -> None:
     async with (
-        # You must create an LLM instance for the `judge` method
         openai.LLM.with_ollama(
             base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
             model="alibayram/medgemma:latest",
@@ -165,18 +164,22 @@ async def entrypoint(ctx: JobContext):
         ),
     )
 
-    await session.start(
-        agent=agent,
-        room=ctx.room,
-    )
-    logger.info("✅ Agent joined as %s", ctx.room.local_participant.identity)
+    result = await session.run(user_input="سلام")
+    logger.info(f"🔍 Result: {result}")
 
-    @ctx.room.on("participant_connected")
-    async def handle_participant(p: rtc.RemoteParticipant):
-        tts_audio = await session.generate_tts("سلام! من دستیار صوتی هستم.")
-        # Convert to LiveKit track
-        local_track = rtc.LocalAudioTrack.from_pcm_bytes(tts_audio, sample_rate=24000)
-        await ctx.room.local_participant.publish_track(local_track)
+
+    # await session.start(
+    #     agent=agent,
+    #     room=ctx.room,
+    # )
+    # logger.info("✅ Agent joined as %s", ctx.room.local_participant.identity)
+
+    # @ctx.room.on("participant_connected")
+    # async def handle_participant(p: rtc.RemoteParticipant):
+    #     tts_audio = await session.generate_tts("سلام! من دستیار صوتی هستم.")
+    #     # Convert to LiveKit track
+    #     local_track = rtc.LocalAudioTrack.from_pcm_bytes(tts_audio, sample_rate=24000)
+    #     await ctx.room.local_participant.publish_track(local_track)
 
 
 
