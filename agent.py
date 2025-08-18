@@ -49,7 +49,7 @@ async def test_stt():
 
 
 async def test_llm():
-    client = AsyncOpenAI(base_url="http://ollama.ollama.svc.yarai.local:11434/api")
+    client = AsyncOpenAI(base_url="http://ollama.ollama.svc.yarai.local:11434/v1/chat/completions")
 
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
@@ -136,13 +136,13 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
-    asyncio.run(test_stt())
+    # asyncio.run(test_stt())
     asyncio.run(test_llm())
-    asyncio.run(test_tts())
-    asyncio.run(list_livekit_rooms())
-    cli.run_app(WorkerOptions(
-            entrypoint_fnc=entrypoint,
-            api_key=os.environ["LIVEKIT_API_KEY"],
-            api_secret=os.environ["LIVEKIT_API_SECRET"],
-            ws_url=os.environ["LIVEKIT_URL"],
-        ))
+    # asyncio.run(test_tts())
+    # asyncio.run(list_livekit_rooms())
+    # cli.run_app(WorkerOptions(
+    #         entrypoint_fnc=entrypoint,
+    #         api_key=os.environ["LIVEKIT_API_KEY"],
+    #         api_secret=os.environ["LIVEKIT_API_SECRET"],
+    #         ws_url=os.environ["LIVEKIT_URL"],
+    #     ))
