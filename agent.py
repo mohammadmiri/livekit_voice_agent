@@ -26,6 +26,8 @@ from livekit.agents import (
     function_tool,
 )
 from livekit.plugins import openai, silero
+from livekit.plugins.turn_detector.multilingual import MultilingualModel
+
 
 from livekit import api, rtc
 from livekit.api.access_token import VideoGrants
@@ -121,7 +123,7 @@ async def entrypoint(ctx: JobContext):
     await ctx.connect(identity="voice-agent")
     
     agent = Agent(
-        instructions="You are a friendly voice assistant built by LiveKit.",
+        instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
     )
 
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
@@ -139,6 +141,7 @@ async def entrypoint(ctx: JobContext):
         tts=openai.TTS(
             base_url="http://172.16.20.10:8080/v1"
         ),
+        turn_detection=MultilingualModel(),
     )
 
     await session.start(
