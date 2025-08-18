@@ -120,7 +120,7 @@ async def entrypoint(ctx: JobContext):
             base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"
         ),
         llm=openai.LLM.with_ollama(
-            base_url="http://ollama.ollama.svc.yarai.local:11434/api",
+            base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
         ),
         tts=openai.TTS(
             base_url="http://172.16.20.10:8080/v1"
@@ -137,12 +137,12 @@ async def entrypoint(ctx: JobContext):
 
 if __name__ == "__main__":
     # asyncio.run(test_stt())
-    asyncio.run(test_llm())
+    # asyncio.run(test_llm())
     # asyncio.run(test_tts())
-    # asyncio.run(list_livekit_rooms())
-    # cli.run_app(WorkerOptions(
-    #         entrypoint_fnc=entrypoint,
-    #         api_key=os.environ["LIVEKIT_API_KEY"],
-    #         api_secret=os.environ["LIVEKIT_API_SECRET"],
-    #         ws_url=os.environ["LIVEKIT_URL"],
-    #     ))
+    asyncio.run(list_livekit_rooms())
+    cli.run_app(WorkerOptions(
+            entrypoint_fnc=entrypoint,
+            api_key=os.environ["LIVEKIT_API_KEY"],
+            api_secret=os.environ["LIVEKIT_API_SECRET"],
+            ws_url=os.environ["LIVEKIT_URL"],
+        ))
