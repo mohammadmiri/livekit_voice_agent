@@ -1,6 +1,6 @@
 
 
-
+import asyncio
 import os
 os.environ["LIVEKIT_API_KEY"] = "APIjqSP6tGk2tFD"
 os.environ["LIVEKIT_API_SECRET"] = "HUPwC1ijdSVXImU5dGjxxOoyhjufssPUNMX6VSelp9s"
@@ -29,18 +29,21 @@ from livekit.plugins import openai, silero
 from livekit import api
 from livekit.api.access_token import VideoGrants
 
+from openai import AsyncOpenAI
+
+client = AsyncOpenAI(base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1")
 
 
 async def test():
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
-    # test STT
     try:
-        stt = openai.STT(
-            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/v1"
+        # send raw audio bytes
+        result = await client.audio.transcriptions.create(
+            model="whisper-1",  # or the model name your service exposes
+            file=("audio.wav", b"hello", "audio/wav")
         )
-        result = await stt.transcribe(b"hello")  # minimal audio bytes
-        logger.info(f"✅ STT service responded: {result}")
+        logger.info(f"✅ STT service responded: {result.text}")
     except Exception as e:
         logger.error(f"❌ STT connection failed: {e}")
 
@@ -103,9 +106,9 @@ async def entrypoint(ctx: JobContext):
 
 if __name__ == "__main__":
     asyncio.run(test())
-    cli.run_app(WorkerOptions(
-            entrypoint_fnc=entrypoint,
-            api_key=os.environ["LIVEKIT_API_KEY"],
-            api_secret=os.environ["LIVEKIT_API_SECRET"],
-            ws_url=os.environ["LIVEKIT_URL"],
-        ))
+    # cli.run_app(WorkerOptions(
+    #         entrypoint_fnc=entrypoint,
+    #         api_key=os.environ["LIVEKIT_API_KEY"],
+    #         api_secret=os.environ["LIVEKIT_API_SECRET"],
+    #         ws_url=os.environ["LIVEKIT_URL"],
+    #     ))
