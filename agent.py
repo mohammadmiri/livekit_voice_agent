@@ -144,31 +144,31 @@ async def entrypoint(ctx: JobContext):
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
     await ctx.connect()
     
-    agent = Agent(
-        instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
-    )
+    # agent = Agent(
+    #     instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
+    # )
 
-    logger.info("🔍 Testing connections to STT/LLM/TTS services...")
+    # logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
-    logger.info("⚡ Now starting AgentSession...")
+    # logger.info("⚡ Now starting AgentSession...")
 
-    session = AgentSession(
-        vad=silero.VAD.load(),
-        stt=openai.STT(
-            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"
-        ),
-        llm=openai.LLM.with_ollama(
-            base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
-            model="alibayram/medgemma:latest",
-        ),
-        tts=openai.TTS(
-            base_url="http://172.16.20.10:8080/v1"
-        ),
-    )
+    # session = AgentSession(
+    #     vad=silero.VAD.load(),
+    #     stt=openai.STT(
+    #         base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"
+    #     ),
+    #     llm=openai.LLM.with_ollama(
+    #         base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
+    #         model="alibayram/medgemma:latest",
+    #     ),
+    #     tts=openai.TTS(
+    #         base_url="http://172.16.20.10:8080/v1"
+    #     ),
+    # )
 
-    result = await session.run(user_input="سلام")
-    logger.info("🔍 Result: **********************************************************")
-    logger.info(f"🔍 Result: {result}")
+    # result = await session.run(user_input="سلام")
+    # logger.info("🔍 Result: **********************************************************")
+    # logger.info(f"🔍 Result: {result}")
 
 
     # await session.start(
