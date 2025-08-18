@@ -79,6 +79,19 @@ async def test_tts():
         logger.error(f"❌ TTS connection failed: {e}")
 
 
+async def check_livekit_connection():
+    try:
+        # Create a client to the LiveKit server
+        client = api.RoomServiceClient(os.environ["LIVEKIT_URL"], os.environ["LIVEKIT_API_KEY"], os.environ["LIVEKIT_API_SECRET"])
+
+        # Simple test: list rooms
+        resp = await client.list_rooms()
+        logger.info(f"✅ Connected to LiveKit, rooms: {resp.rooms}")
+        return True
+    except Exception as e:
+        logger.error(f"❌ Failed to connect to LiveKit: {e}")
+        return False
+
 
 async def entrypoint(ctx: JobContext):
     await ctx.connect()
@@ -140,6 +153,7 @@ if __name__ == "__main__":
     asyncio.run(test_stt())
     asyncio.run(test_llm())
     asyncio.run(test_tts())
+    asyncio.run(check_livekit_connection())
     cli.run_app(WorkerOptions(
             entrypoint_fnc=entrypoint,
             api_key=os.environ["LIVEKIT_API_KEY"],
