@@ -165,6 +165,7 @@ async def entrypoint(ctx: JobContext):
     )
 
     result = await session.run(user_input="سلام")
+    logger.info("🔍 Result: **********************************************************")
     logger.info(f"🔍 Result: {result}")
 
 
