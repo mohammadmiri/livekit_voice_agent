@@ -27,7 +27,7 @@ from livekit.agents import (
 )
 from livekit.plugins import openai, silero
 
-from livekit import api
+from livekit import api, rtc
 from livekit.api.access_token import VideoGrants
 
 from openai import AsyncOpenAI
@@ -147,18 +147,12 @@ async def entrypoint(ctx: JobContext):
     )
     logger.info("✅ Agent joined as %s", ctx.room.local_participant.identity)
 
-    # greet existing participants
-    for p in ctx.room.remote_participants.values():
-        logger.info("👤 Already in room: %s", p.identity)
-        await session.generate_reply(
-            instructions=f"سلام {p.identity}! من دستیار صوتی هستم. می‌تونم کمکت کنم؟"
-        )
-
     @ctx.room.on("participant_connected")
     async def handle_participant(p: rtc.RemoteParticipant):
-        await session.generate_reply(
-            instructions=f"سلام {p.identity}! من دستیار صوتی هستم. می‌تونم کمکت کنم؟"
-        )
+        tts_audio = await session.generate_tts("سلام! من دستیار صوتی هستم.")
+        # Convert to LiveKit track
+        local_track = rtc.LocalAudioTrack.from_pcm_bytes(tts_audio, sample_rate=24000)
+        await ctx.room.local_participant.publish_track(local_track)
 
 
 
