@@ -140,14 +140,21 @@ async def test_your_agent() -> None:
 
 
 
+class CustomerServiceAgent(Agent):
+    def __init__(self):
+        super().__init__(instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",)
+
+    async def on_enter(self) -> None:
+        await self.say("سلام خیلی خوش آمدید به مکالمه صوتی من")
+
+
+
 async def entrypoint(ctx: JobContext):
 
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
     await ctx.connect()
     
-    agent = Agent(
-        instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
-    )
+    agent = CustomerServiceAgent()
 
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
@@ -175,13 +182,6 @@ async def entrypoint(ctx: JobContext):
         room=ctx.room,
     )
     logger.info("✅ Agent joined as %s", ctx.room.local_participant.identity)
-
-    @ctx.room.on("participant_connected")
-    async def handle_participant(p: rtc.RemoteParticipant):
-        await session.say(
-            "سلام خیلی خوش آمدید به مکالمه صوتی من",
-            allow_interruptions=False,
-        )
 
 
 
