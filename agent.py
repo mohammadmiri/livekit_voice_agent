@@ -175,7 +175,7 @@ async def entrypoint(ctx: JobContext):
     @ctx.room.on("participant_connected")
     async def handle_participant(p: rtc.RemoteParticipant):
         await session.say(
-            "Hello. How can I help you today?",
+            "سلام خیلی خوش آمدید به مکالمه صوتی من",
             allow_interruptions=False,
         )
 
