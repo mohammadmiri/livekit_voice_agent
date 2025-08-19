@@ -73,7 +73,7 @@ async def test_tts():
     try:
         audio = await client.audio.speech.create(
             model="tts-1",
-            input="Hello, world!",
+            input="سلام خیلی خوش آمدید به مکالمه صوتی من",
             voice="nova"
         )
         open("audio.wav", "wb").write(audio.content)

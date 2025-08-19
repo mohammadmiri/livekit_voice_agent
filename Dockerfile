@@ -6,6 +6,7 @@ RUN apt-get update && \
     libapparmor-dev \
     libdbus-1-dev \
     python3-apt \
+    openssh-client \ 
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3.12 -m ensurepip --upgrade
