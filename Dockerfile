@@ -22,4 +22,4 @@ COPY . .
 
 # CMD ["python", "agent.py", "connect", "--room", "default-room", "--participant-identity", "voice-agent"]
 # CMD ["python", "agent.py", "start"]
-CMD ["python", "print", "hello"]
+CMD ["ls", "-la"]
