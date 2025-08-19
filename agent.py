@@ -187,10 +187,10 @@ async def entrypoint(ctx: JobContext):
 
 if __name__ == "__main__":
 
-    logger.info("🔍 ***************************** 2")
-    asyncio.run(test_stt())
+    logger.info("🔍 ***************************** 4")
+    # asyncio.run(test_stt())
     # asyncio.run(test_llm())
-    asyncio.run(test_tts())
+    # asyncio.run(test_tts())
     # asyncio.run(list_livekit_rooms())
     # asyncio.run(ensure_room())
     # asyncio.run(test_your_agent())
