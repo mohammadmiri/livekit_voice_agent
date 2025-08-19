@@ -40,7 +40,7 @@ async def test_stt():
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
     try:
-        file = open("welcome.mp3", "rb")
+        file = open("welcome.wav", "rb")
         result = await client.audio.transcriptions.create(
             model="whisper-1",
             file=("audio.wav", file, "audio/wav")
@@ -187,10 +187,10 @@ async def entrypoint(ctx: JobContext):
 
 if __name__ == "__main__":
 
-    logger.info("🔍 ***************************** 1")
-    # asyncio.run(test_stt())
+    logger.info("🔍 ***************************** 2")
+    asyncio.run(test_stt())
     # asyncio.run(test_llm())
-    # asyncio.run(test_tts())
+    asyncio.run(test_tts())
     # asyncio.run(list_livekit_rooms())
     # asyncio.run(ensure_room())
     # asyncio.run(test_your_agent())
