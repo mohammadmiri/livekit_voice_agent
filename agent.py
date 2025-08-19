@@ -68,7 +68,7 @@ async def test_llm():
 async def test_tts():
     client = AsyncOpenAI(base_url="http://172.16.20.10:8080/v1")
 
-    logger.info("🔍 Testing connections to STT/LLM/TTS services...")
+    logger.info("🔍 Testing TTS service...")
 
     try:
         audio = await client.audio.speech.create(
