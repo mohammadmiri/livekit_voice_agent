@@ -174,7 +174,30 @@ async def entrypoint(ctx: JobContext):
 
     @ctx.room.on("participant_connected")
     async def handle_participant(p: rtc.RemoteParticipant):
-        await session.generate_reply(instructions="Ask for permission to record the call for quality assurance purposes.")
+        logger.info(f"Participant connected: {p.identity}")
+
+        # Generate TTS
+        tts_audio = await session.generate_tts(
+            "سلام! من دستیار صوتی هستم."
+        )
+
+        if len(tts_audio) == 0:
+            logger.warning("TTS generated empty audio!")
+            return
+
+        # Resample to 48 kHz if needed
+        import librosa
+        tts_audio_48k = librosa.resample(tts_audio.astype(np.float32), orig_sr=24000, target_sr=48000)
+
+        # Convert float32 to int16 PCM
+        tts_pcm = (tts_audio_48k * 32767).astype(np.int16).tobytes()
+
+        # Create LiveKit audio track
+        local_track = rtc.LocalAudioTrack.from_pcm_bytes(tts_pcm, sample_rate=48000)
+
+        # Publish track
+        await ctx.room.local_participant.publish_track(local_track)
+        logger.info("🔊 TTS track published to room")
 
 
 
