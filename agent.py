@@ -166,11 +166,6 @@ async def entrypoint(ctx: JobContext):
         ),
     )
 
-    result = await session.run(user_input="سلام")
-    logger.info("🔍 Result: **********************************************************")
-    logger.info(f"🔍 Result: {result}")
-
-
     await session.start(
         agent=agent,
         room=ctx.room,
@@ -179,10 +174,7 @@ async def entrypoint(ctx: JobContext):
 
     @ctx.room.on("participant_connected")
     async def handle_participant(p: rtc.RemoteParticipant):
-        tts_audio = await session.generate_tts("سلام! من دستیار صوتی هستم.")
-        # Convert to LiveKit track
-        local_track = rtc.LocalAudioTrack.from_pcm_bytes(tts_audio, sample_rate=24000)
-        await ctx.room.local_participant.publish_track(local_track)
+        await session.generate_reply(instructions="Ask for permission to record the call for quality assurance purposes.")
 
 
 
