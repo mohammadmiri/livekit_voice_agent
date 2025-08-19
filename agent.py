@@ -199,4 +199,5 @@ if __name__ == "__main__":
             api_key=os.environ["LIVEKIT_API_KEY"],
             api_secret=os.environ["LIVEKIT_API_SECRET"],
             ws_url=os.environ["LIVEKIT_URL"],
+            port=8989,
         ))
