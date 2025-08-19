@@ -142,47 +142,47 @@ async def test_your_agent() -> None:
 async def entrypoint(ctx: JobContext):
 
     logger.info("🔍 Testing connections to STT/LLM/TTS services...")
-    # await ctx.connect()
+    await ctx.connect()
     
-    # agent = Agent(
-    #     instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
-    # )
+    agent = Agent(
+        instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",
+    )
 
-    # logger.info("🔍 Testing connections to STT/LLM/TTS services...")
+    logger.info("🔍 Testing connections to STT/LLM/TTS services...")
 
-    # logger.info("⚡ Now starting AgentSession...")
+    logger.info("⚡ Now starting AgentSession...")
 
-    # session = AgentSession(
-    #     vad=silero.VAD.load(),
-    #     stt=openai.STT(
-    #         base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"
-    #     ),
-    #     llm=openai.LLM.with_ollama(
-    #         base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
-    #         model="alibayram/medgemma:latest",
-    #     ),
-    #     tts=openai.TTS(
-    #         base_url="http://172.16.20.10:8080/v1"
-    #     ),
-    # )
+    session = AgentSession(
+        vad=silero.VAD.load(),
+        stt=openai.STT(
+            base_url="http://my-whisper-service.whisper.svc.yarai.local:9000/api/v1"
+        ),
+        llm=openai.LLM.with_ollama(
+            base_url="http://ollama.ollama.svc.yarai.local:11434/v1",
+            model="alibayram/medgemma:latest",
+        ),
+        tts=openai.TTS(
+            base_url="http://172.16.20.10:8080/v1"
+        ),
+    )
 
-    # result = await session.run(user_input="سلام")
-    # logger.info("🔍 Result: **********************************************************")
-    # logger.info(f"🔍 Result: {result}")
+    result = await session.run(user_input="سلام")
+    logger.info("🔍 Result: **********************************************************")
+    logger.info(f"🔍 Result: {result}")
 
 
-    # await session.start(
-    #     agent=agent,
-    #     room=ctx.room,
-    # )
-    # logger.info("✅ Agent joined as %s", ctx.room.local_participant.identity)
+    await session.start(
+        agent=agent,
+        room=ctx.room,
+    )
+    logger.info("✅ Agent joined as %s", ctx.room.local_participant.identity)
 
-    # @ctx.room.on("participant_connected")
-    # async def handle_participant(p: rtc.RemoteParticipant):
-    #     tts_audio = await session.generate_tts("سلام! من دستیار صوتی هستم.")
-    #     # Convert to LiveKit track
-    #     local_track = rtc.LocalAudioTrack.from_pcm_bytes(tts_audio, sample_rate=24000)
-    #     await ctx.room.local_participant.publish_track(local_track)
+    @ctx.room.on("participant_connected")
+    async def handle_participant(p: rtc.RemoteParticipant):
+        tts_audio = await session.generate_tts("سلام! من دستیار صوتی هستم.")
+        # Convert to LiveKit track
+        local_track = rtc.LocalAudioTrack.from_pcm_bytes(tts_audio, sample_rate=24000)
+        await ctx.room.local_participant.publish_track(local_track)
 
 
 
