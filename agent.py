@@ -185,9 +185,9 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
-    
-    asyncio.run(test_stt())
-    asyncio.run(test_llm())
+
+    # asyncio.run(test_stt())
+    # asyncio.run(test_llm())
     asyncio.run(test_tts())
     # asyncio.run(list_livekit_rooms())
     # asyncio.run(ensure_room())
