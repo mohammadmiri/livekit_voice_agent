@@ -185,6 +185,7 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
+    
     asyncio.run(test_stt())
     asyncio.run(test_llm())
     asyncio.run(test_tts())
