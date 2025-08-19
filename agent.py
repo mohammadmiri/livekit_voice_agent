@@ -163,7 +163,9 @@ async def entrypoint(ctx: JobContext):
             model="alibayram/medgemma:latest",
         ),
         tts=openai.TTS(
-            base_url="http://172.16.20.10:8080/v1"
+            base_url="http://172.16.20.10:8080/v1",
+            model="tts-1",
+            voice="nova"
         ),
     )
 
