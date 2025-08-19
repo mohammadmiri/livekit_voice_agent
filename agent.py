@@ -76,6 +76,7 @@ async def test_tts():
             input="Hello, world!",
             voice="nova"
         )
+        open("audio.wav", "wb").write(audio.content)
         logger.info(f"✅ TTS service returned {str(audio)}")
     except Exception as e:
         logger.error(f"❌ TTS connection failed: {e}")
@@ -184,7 +185,7 @@ async def entrypoint(ctx: JobContext):
 if __name__ == "__main__":
     # asyncio.run(test_stt())
     # asyncio.run(test_llm())
-    # asyncio.run(test_tts())
+    asyncio.run(test_tts())
     # asyncio.run(list_livekit_rooms())
     # asyncio.run(ensure_room())
     # asyncio.run(test_your_agent())
