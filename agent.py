@@ -173,7 +173,8 @@ async def entrypoint(ctx: JobContext):
         tts=openai.TTS(
             base_url="http://172.16.20.10:8080/v1",
             model="tts-1",
-            voice="nova"
+            voice="nova",
+            response_format="wav",
         ),
     )
 
@@ -187,7 +188,7 @@ async def entrypoint(ctx: JobContext):
 
 if __name__ == "__main__":
 
-    logger.info("🔍 ***************************** 4")
+    logger.info("🔍 ***************************** 5")
     # asyncio.run(test_stt())
     # asyncio.run(test_llm())
     # asyncio.run(test_tts())
