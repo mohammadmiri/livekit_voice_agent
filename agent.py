@@ -145,7 +145,7 @@ class CustomerServiceAgent(Agent):
         super().__init__(instructions="تو یه دستیار صوتی هستی که با انسان صحبت میکنه و اون هم با تو صحبت میکنه",)
 
     async def on_enter(self) -> None:
-        await self.say("سلام خیلی خوش آمدید به مکالمه صوتی من")
+        await self.session.say("سلام خیلی خوش آمدید به مکالمه صوتی من")
 
 
 
